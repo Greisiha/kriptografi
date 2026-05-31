@@ -1,1 +1,185 @@
-<!DOCTYPE html> <html lang="sq"> <head> <meta charset="UTF-8"> <title>Algoritmi Vigenère Cipher App</title> <style> body { font-family: Arial; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; text-align: center; padding: 30px; } h1 { margin-bottom: 10px; } input, button { padding: 12px; margin: 8px; border-radius: 10px; border: none; font-size: 14px; } input { width: 60%; max-width: 400px; } button { cursor: pointer; transition: 0.3s; font-weight: bold; } button:hover { transform: scale(1.05); } .encrypt { background: #22c55e; color: white; } .decrypt { background: #3b82f6; color: white; } .box { margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; min-height: 60px; max-width: 600px; margin-left: auto; margin-right: auto; } .result { word-wrap: break-word; } /* 🔥 SHTUAR: seksioni i shpjegimit */ .explanation { max-width: 800px; margin: 30px auto; text-align: left; background: rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; line-height: 1.6; } </style> </head> <body> <h1>🔐 Vigenère Cipher, një nga algoritmet më të njohura të kriptimit polialfabetik </h1> <p>Projekt për Kriptografi (Punoi: Greisi Haçkaj)</p> <input id="text" placeholder="Shkruaj mesazhin..."><br> <input id="key" placeholder="Key (fjalë ose numër)"><br> <button class="encrypt" onclick="encrypt()">Enkripto</button> <button class="decrypt" onclick="decrypt()">Dekripto</button> <div class="box"> <h3>Rezultati:</h3> <p id="result" class="result"></p> </div> <!-- 🔥 SHTUAR: SHPJEGIMI NË WEB --> <div class="explanation"> <h2>🔐 Si funksionon zhvendosja në këtë aplikacion?</h2> <p> Ky projekt përdor algoritmin <b>Vigenère Cipher</b>, ku çdo shkronjë e mesazhit zhvendoset sipas një <b>key</b>. Key mund të jetë <b>numër</b> ose <b>shkronjë</b>. </p> <hr> <h3> Kur key është NUMËR</h3> <p> Nëse key është numër (p.sh. <b>1234</b>), çdo shifër përdoret direkt si zhvendosje. </p> <ul> <li>1 → 1 hap</li> <li>2 → 2 hapa</li> <li>3 → 3 hapa</li> </ul> <p> Sa më i madh numri, aq më shumë zhvendoset shkronja në alfabet. </p> <hr> <h3> Kur key është SHKRONJË</h3> <p> Nëse key është fjalë (p.sh. <b>CODE</b>), çdo shkronjë kthehet në numër: </p> <ul> <li>A = 0</li> <li>B = 1</li> <li>C = 2</li> <li>D = 3</li> <li>...</li> <li>Z = 25</li> </ul> <p> Shembull: CODE → C=2, O=14, D=3, E=4 </p> <hr> <h3>⚙️ Si funksionon kriptimi</h3> <ul> <li>Enkriptimi: shtohet zhvendosja </li> <li>Dekriptimi: zbritet zhvendosja </li> </ul> <p> Formula: <b>(shkronja + shift) mod 26</b> </p> <hr> <h3> Përmbledhje</h3> <ul> <li>Numër → përdoret direkt si hap</li> <li>Shkronjë → konvertohet në alfabet</li> <li>Key vendos sa zhvendoset çdo shkronjë</li> </ul> </div> <script> function getShift(key, index) { let char = key[index % key.length]; if (!isNaN(char)) { return parseInt(char); } return char.toUpperCase().charCodeAt(0) - 65; } function vigenere(text, key, decrypt = false) { let result = ""; if (!key || key.length === 0) { return "⚠ Vendos një key!"; } let kIndex = 0; for (let i = 0; i < text.length; i++) { let c = text[i]; let code = text.charCodeAt(i); if (/[a-z]/i.test(c)) { let shift = getShift(key, kIndex); if (decrypt) shift = -shift; if (code >= 65 && code <= 90) { c = String.fromCharCode((code - 65 + shift + 26) % 26 + 65); kIndex++; } else if (code >= 97 && code <= 122) { c = String.fromCharCode((code - 97 + shift + 26) % 26 + 97); kIndex++; } } result += c; } return result; } function encrypt() { let text = document.getElementById("text").value; let key = document.getElementById("key").value; document.getElementById("result").innerText = vigenere(text, key, false); } function decrypt() { let text = document.getElementById("text").value; let key = document.getElementById("key").value; document.getElementById("result").innerText = vigenere(text, key, true); } </script> </body> </html>
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<title>Algoritmi Vigenère Cipher App</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  text-align: center;
+  padding: 30px;
+}
+
+h1 { margin-bottom: 10px; }
+
+input, button {
+  padding: 12px;
+  margin: 8px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+}
+
+input {
+  width: 60%;
+  max-width: 400px;
+}
+
+button {
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+button:hover { transform: scale(1.05); }
+
+.encrypt { background: #22c55e; color: white; }
+.decrypt { background: #3b82f6; color: white; }
+
+.box {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  min-height: 60px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.result { word-wrap: break-word; }
+
+table {
+  margin: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px;
+}
+
+th {
+  background: rgba(255,255,255,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🔐 Vigenère Cipher App</h1>
+<p>Projekt për Kriptografi (Greisi Haçkaj)</p>
+
+<!-- 🔥 SHPJEGIMI I SHTUAR -->
+<p>
+🔢 Kur key është numër: çdo shifër përdoret si zhvendosje direkte (p.sh. 3 = 3 hapa në alfabet).<br>
+🔤 Kur key është shkronjë: ajo kthehet në numër (A=0 deri Z=25) dhe përdoret si zhvendosje.
+</p>
+
+<input id="text" placeholder="Shkruaj mesazhin..."><br>
+<input id="key" placeholder="Key (fjalë ose numër)"><br>
+
+<button class="encrypt" onclick="encrypt()">Enkripto</button>
+<button class="decrypt" onclick="decrypt()">Dekripto</button>
+
+<div class="box">
+  <h3>Rezultati:</h3>
+  <p id="result" class="result"></p>
+</div>
+
+<div class="box">
+  <h3>📊 Tabela e enkriptimit</h3>
+  <div id="steps"></div>
+</div>
+
+<script>
+function getShift(key, index) {
+  let char = key[index % key.length];
+
+  if (!isNaN(char)) {
+    return parseInt(char);
+  }
+
+  return char.toUpperCase().charCodeAt(0) - 65;
+}
+
+function vigenere(text, key, decrypt = false) {
+  let result = "";
+  let table = "";
+
+  if (!key || key.length === 0) {
+    document.getElementById("steps").innerHTML = "";
+    return "⚠ Vendos një key!";
+  }
+
+  let kIndex = 0;
+
+  table = `
+    <table>
+      <tr>
+        <th>Char</th>
+        <th>Key</th>
+        <th>Shift</th>
+        <th>Result</th>
+      </tr>
+  `;
+
+  for (let i = 0; i < text.length; i++) {
+    let c = text[i];
+    let code = text.charCodeAt(i);
+
+    if (/[a-z]/i.test(c)) {
+
+      let keyChar = key[kIndex % key.length];
+      let shift = getShift(key, kIndex);
+
+      let realShift = decrypt ? -shift : shift;
+
+      if (code >= 65 && code <= 90) {
+        c = String.fromCharCode((code - 65 + realShift + 26) % 26 + 65);
+        kIndex++;
+      } 
+      else if (code >= 97 && code <= 122) {
+        c = String.fromCharCode((code - 97 + realShift + 26) % 26 + 97);
+        kIndex++;
+      }
+
+      table += `
+        <tr>
+          <td>${text[i]}</td>
+          <td>${keyChar}</td>
+          <td>${shift}</td>
+          <td>${c}</td>
+        </tr>
+      `;
+    }
+
+    result += c;
+  }
+
+  table += "</table>";
+
+  document.getElementById("steps").innerHTML = table;
+
+  return result;
+}
+
+function encrypt() {
+  let text = document.getElementById("text").value;
+  let key = document.getElementById("key").value;
+  document.getElementById("result").innerText = vigenere(text, key, false);
+}
+
+function decrypt() {
+  let text = document.getElementById("text").value;
+  let key = document.getElementById("key").value;
+  document.getElementById("result").innerText = vigenere(text, key, true);
+}
+</script>
+
+</body>
+</html>
