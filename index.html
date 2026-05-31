@@ -51,6 +51,17 @@ button:hover { transform: scale(1.05); }
 }
 
 .result { word-wrap: break-word; }
+
+/* 🔥 SHTUAR: seksioni i shpjegimit */
+.explanation {
+  max-width: 800px;
+  margin: 30px auto;
+  text-align: left;
+  background: rgba(255,255,255,0.08);
+  padding: 20px;
+  border-radius: 12px;
+  line-height: 1.6;
+}
 </style>
 </head>
 
@@ -70,16 +81,88 @@ button:hover { transform: scale(1.05); }
   <p id="result" class="result"></p>
 </div>
 
+<!-- 🔥 SHTUAR: SHPJEGIMI NË WEB -->
+<div class="explanation">
+
+<h2>🔐 Si funksionon “shift”-i në këtë aplikacion?</h2>
+
+<p>
+Ky projekt përdor algoritmin <b>Vigenère Cipher</b>, ku çdo shkronjë e mesazhit zhvendoset sipas një <b>key</b>.
+Key mund të jetë <b>numër</b> ose <b>shkronjë</b>.
+</p>
+
+<hr>
+
+<h3>🔢 Kur key është NUMËR</h3>
+
+<p>
+Nëse key është numër (p.sh. <b>1234</b>), çdo shifër përdoret direkt si zhvendosje.
+</p>
+
+<ul>
+<li>1 → 1 hap</li>
+<li>2 → 2 hapa</li>
+<li>3 → 3 hapa</li>
+</ul>
+
+<p>
+👉 Sa më i madh numri, aq më shumë “ec” shkronja në alfabet.
+</p>
+
+<hr>
+
+<h3>🔤 Kur key është SHKRONJË</h3>
+
+<p>
+Nëse key është fjalë (p.sh. <b>CODE</b>), çdo shkronjë kthehet në numër:
+</p>
+
+<ul>
+<li>A = 0</li>
+<li>B = 1</li>
+<li>C = 2</li>
+<li>D = 3</li>
+<li>...</li>
+<li>Z = 25</li>
+</ul>
+
+<p>
+👉 Shembull: CODE → C=2, O=14, D=3, E=4
+</p>
+
+<hr>
+
+<h3>⚙️ Si funksionon kriptimi</h3>
+
+<ul>
+<li>Enkriptimi: shtohet shift-i</li>
+<li>Dekriptimi: zbritet shift-i</li>
+</ul>
+
+<p>
+Formula: <b>(shkronja + shift) mod 26</b>
+</p>
+
+<hr>
+
+<h3>🎯 Përmbledhje</h3>
+
+<ul>
+<li>Numër → përdoret direkt si hap</li>
+<li>Shkronjë → konvertohet në alfabet</li>
+<li>Key vendos sa “ec” çdo shkronjë</li>
+</ul>
+
+</div>
+
 <script>
 function getShift(key, index) {
   let char = key[index % key.length];
 
-  // 🔥 NËSE ËSHTË NUMËR REAL
   if (!isNaN(char)) {
-    return parseInt(char); // 1 = 1, 2 = 2
+    return parseInt(char);
   }
 
-  // 🔥 NËSE ËSHTË SHKRONJË
   return char.toUpperCase().charCodeAt(0) - 65;
 }
 
